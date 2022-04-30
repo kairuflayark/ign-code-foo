@@ -1,0 +1,85 @@
+<div class="container">
+    Menu bar here
+    <br>
+    TODO: Figure out why it will only load the new video after resizing the player
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 offset-md-1">
+            <div class="ratio ratio-16x9">
+
+
+                <!--  -->
+                <vg-player>
+                    <vg-overlay-play></vg-overlay-play>
+                    <vg-buffering></vg-buffering>
+                
+                    <vg-scrub-bar>
+                        <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                        <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+                    </vg-scrub-bar>
+                
+                    <vg-controls>
+                        <vg-play-pause></vg-play-pause>
+                        <vg-playback-button></vg-playback-button>
+                
+                        <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+                
+                        <vg-scrub-bar style="pointer-events: none;"></vg-scrub-bar>
+                
+                        <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+                
+                        <vg-track-selector></vg-track-selector>
+                        <vg-mute></vg-mute>
+                        <vg-volume></vg-volume>
+                
+                        <vg-fullscreen></vg-fullscreen>
+                    </vg-controls>
+                
+                    <video [vgMedia]="$any(media)" #media preload="auto" [src]="selectedVideoURL"(ended)="nextVideo()" crossorigin>
+                        Your browser does not support HTML5 video.
+                    </video>
+                </vg-player>
+            </div>
+          
+
+            <h2>{{ videoList[selectedVideo].metadata.title }}</h2>
+            <p [innerText]="videoList[selectedVideo].metadata.description"> </p>
+
+
+
+
+
+
+        </div>
+        <div class="col-md-4">
+            <div *ngFor="let video of videoList | slice:selectedVideo" (click)="changeVideo(video.contentId)" >
+                <div class="row" *ngIf="video.contentId != videoList[selectedVideo].contentId">                
+                    <div class="col-6">
+                        <img [src]="video.thumbnails[0].url" class="img-thumbnail rounded">
+                    </div>
+                    <div class="col-6">
+                        <p>{{video.metadata.title}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <button (click)="loadMore()" class="action">Load More</button>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+    </div>
+</div>
+

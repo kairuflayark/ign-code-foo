@@ -1,0 +1,10 @@
+button.action{
+    background-color: red;
+    color: white;
+    font-size: 1.2em;
+    height: 2em;
+    width: 100%;
+    box-shadow: none;
+    border: none;
+    border-radius: .2em;
+}
