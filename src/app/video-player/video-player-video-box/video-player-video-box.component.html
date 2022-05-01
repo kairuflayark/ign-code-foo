@@ -1,7 +1,7 @@
 <div class="ratio ratio-16x9">
 
 
-        
+    <!-- TODO figure out how to customize the CSS of the player -->
     <vg-player (onPlayerReady)="onPlayerReady($event)">
         <vg-overlay-play></vg-overlay-play>
         <vg-buffering></vg-buffering>
@@ -33,7 +33,7 @@
             [src]="videoURL" crossorigin 
             [autoplay]="autoplay"
             [poster]="thumbnailURL">
-            <!-- TODO:Figure out how to get the poster to work -->
+            <!-- TODO:Figure out how to get the poster to work. CORS is great for security. A pain when you need to selectively disable it -->
             Your browser does not support HTML5 video.
         </video>
     </vg-player>

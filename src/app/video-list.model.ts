@@ -1,13 +1,15 @@
+// the structure of the video data. 
 export class Video{
     public contentId:string = "";
     public contentType:string = "";
-    public thumbnails: Array<Thumbnail> = [];
+    public thumbnails: Thumbnail[] = [];
     public metadata: Metadata = {
         title: "",
         description: ""
     };
-    public assets: Array<Asset> = []
+    public assets: Asset[] = []
 
+    //
     constructor(
         contentId:string, 
         contentType:string,

@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams, HttpClientJsonpModule} from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { Video } from './video-list.model';
+
 
 
 @Injectable({
@@ -9,46 +10,46 @@ import { Video } from './video-list.model';
 })
 export class VideoServiceService {
   private VIDEO_ENDPOINT = "https://ign-apis.herokuapp.com/videos"
+  private _videoList = new BehaviorSubject<Video[]>([]);
+  private videoList: Video[] = []
   
-
   constructor(private http: HttpClient) { }
 
 
-  // createVideoSubscriber(){
-  //   const videoList = new Observable((observer) => {
 
-  //   })
-  // }
-
-  getVideos(startIndex:number, count:number): Observable<any> {
-
+  //API call to video endpoint
+  loadVideos(startIndex:number, count:number): Observable<any> {
       const getVideoURL = `${this.VIDEO_ENDPOINT}?startIndex=${startIndex}&count=${count}`;
-      console.log(getVideoURL);
 
-    
+
       return this.http.jsonp(getVideoURL, 'callback')
       .pipe(
         catchError(this.handleError) // then handle the error
     );
   }
 
+  //calls the API then processes the object returned into a useful format
+  processVideos(startIndex:number, count:number){
+    this.videoList = []
+    this.loadVideos(startIndex,count).subscribe((data: any)=>{
 
-  // processVideos(startIndex:number, count:number) {
+      let videos = data.data
 
-  //  return this.getVideos(startIndex,count).subscribe((data: any)=>{
-  //     console.log(data);
-  //     let videos = data.data
-  //     console.log(videos);
       
-  //     let nVideoList: Array<Video> = []
-  //     for (let video of videos){
+      let nVideoList: Array<Video> = []
+      for (let video of videos){
   
-  //       let nVideo = new Video(video.contentId, video.contentType, video.thumbnails, video.metadata, video.assets)
-  //       nVideoList.push(nVideo)
-  //     }
-  //     return nVideoList
-  //   })
-  // }
+        let nVideo = new Video(video.contentId, video.contentType, video.thumbnails, video.metadata, video.assets)
+        this.videoList.push(nVideo)
+      }
+      this._videoList.next(this.videoList)
+    })
+  }
+
+
+  observeVideos(): Observable<Video[]> {
+    return this._videoList
+  }
 
   handleError(error:HttpErrorResponse) {
     if (error.status === 0) {

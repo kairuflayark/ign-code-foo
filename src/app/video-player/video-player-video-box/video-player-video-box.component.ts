@@ -8,7 +8,7 @@ import { VgApiService } from '@videogular/ngx-videogular/core';
   styleUrls: ['./video-player-video-box.component.css']
 })
 export class VideoPlayerVideoBoxComponent implements OnInit {
-  @Input("thumbnailURL") thumbnailURL!:string;
+  @Input("thumbnailURL") thumbnailURL!:SafeUrl;
   @Input("videoURL") videoURL!:SafeUrl;
   @Input("title") title!:string;
   @Input("description") description!:string
@@ -21,10 +21,6 @@ export class VideoPlayerVideoBoxComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-  }
-
-  ngOnChanges(changes: SimpleChange){
-    console.log(changes);
   }
 
   onPlayerReady(api: VgApiService) {

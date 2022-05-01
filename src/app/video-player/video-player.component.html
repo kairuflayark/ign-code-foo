@@ -1,18 +1,19 @@
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6 offset-md-1">
+            <!-- subcomponent that displays the video and video metadata -->
             <app-video-player-video-box
                 [videoURL]="selectedVideoURL"
                 [title]="videoList[selectedVideo].metadata.title"
                 [description]="videoList[selectedVideo].metadata.description"
-                [thumbnailURL]="videoList[selectedVideo].thumbnails[videoList[selectedVideo].thumbnails.length - 1].url"
+                [thumbnailURL]="selectedVideoThumbnail"
                 (nextVideo)="nextVideo()"
             >
             </app-video-player-video-box>
         </div>
     
         <div class="col-md-4">
+            <!-- Loop to display video playlist -->
                 <app-video-player-playlist 
                 *ngFor="let video of videoList | slice:selectedVideo +1 "
                 [contentId]="video.contentId"
@@ -22,7 +23,7 @@
                 </app-video-player-playlist>
 
                 
- 
+            <!-- Button to load more videos -->
             <div class="row">
                 <div class="col-12">
                     <button (click)="loadMore()" class="action">Load More</button>
