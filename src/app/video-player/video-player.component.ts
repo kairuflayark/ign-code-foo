@@ -48,7 +48,7 @@ export class VideoPlayerComponent implements OnInit {
       this.count = this.videoList.length
 
 
-      this.getVideoSize()      
+      this.getVideoSize(0)      
       // this.handleTimeStamps()
       // if(this.selectedVideo = undefined){
       //   this.selectedVideo = this.videoList[0]
@@ -58,14 +58,18 @@ export class VideoPlayerComponent implements OnInit {
     })
   }
 
-  getVideoSize(){
+  getVideoSize(index:number){
+    //most hacky line of code: it makes sure that there is a default URL to link to.
+    this.selectedVideoURL = this.sanitizer.bypassSecurityTrustResourceUrl(this.videoList[this.selectedVideo].assets[this.videoList[this.selectedVideo].assets.length -1].url)
     for(let asset of this.videoList[this.selectedVideo].assets){
-      if(asset.width > this.screenWidth){
+      
+      if(asset.width > (this.screenWidth * .7) ){
         this.selectedVideoURL = this.sanitizer.bypassSecurityTrustResourceUrl(asset.url)
+        this.selectedVideo = index;
         console.log(this.selectedVideoURL);
 
         return
-      }
+      } 
     }
   }
 
@@ -74,21 +78,22 @@ export class VideoPlayerComponent implements OnInit {
   }
 
   changeVideo(contentId:string){
+    console.log(contentId);
+    
     for(let [index, video] of this.videoList.entries()){
       if(video.contentId === contentId){
-        this.selectedVideo = index;
-        this.getVideoSize()
+
+        this.getVideoSize(index)
 
         console.log(this.selectedVideo)
         return
-
-
-        
       }
     }
   }
 
   nextVideo(){
+
+    
     console.log(this.selectedVideo);
     
     this.selectedVideo += 1;
@@ -99,7 +104,7 @@ export class VideoPlayerComponent implements OnInit {
   @HostListener('window:resize', ['$event'])
     onResize() {
       this.screenWidth = window.innerWidth;
-      this.getVideoSize()
+      this.getVideoSize(this.selectedVideo)
     
     
     }

@@ -9,13 +9,17 @@ import {VgBufferingModule} from '@videogular/ngx-videogular/buffering';
 import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
 
 import { VideoPlayerComponent } from './video-player/video-player.component';
+import { VideoPlayerPlaylistComponent } from './video-player/video-player-playlist/video-player-playlist.component';
+import { VideoPlayerVideoBoxComponent } from './video-player/video-player-video-box/video-player-video-box.component';
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    VideoPlayerComponent
+    VideoPlayerComponent,
+    VideoPlayerPlaylistComponent,
+    VideoPlayerVideoBoxComponent
 
   ],
   imports: [
