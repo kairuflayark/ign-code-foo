@@ -1,8 +1,4 @@
-<div class="container">
-    Menu bar here
-    <br>
-    
-</div>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6 offset-md-1">
@@ -15,42 +11,22 @@
             >
             </app-video-player-video-box>
         </div>
-        
-
-
-
-
-        
+    
         <div class="col-md-4">
-            <!-- <div *ngFor="let video of videoList | slice:selectedVideo" (click)="changeVideo(video.contentId)" > -->
                 <app-video-player-playlist 
                 *ngFor="let video of videoList | slice:selectedVideo +1 "
                 [contentId]="video.contentId"
                 [thumbnailURL]="video.thumbnails[0].url"
                 [title]="video.metadata.title" 
-                (changeVideo)="changeVideo($event)"
-                >
-
-
-
+                (changeVideo)="changeVideo($event)">
                 </app-video-player-playlist>
 
                 
-                <!-- <div class="row">                
-                    <div class="col-6">
-                        <img [src]="video.thumbnails[0].url" class="img-thumbnail rounded">
-                    </div>
-                    <div class="col-6">
-                        <p>{{video.metadata.title}}</p>
-                    </div>
-                </div> -->
-            <!-- </div> -->
-
+ 
             <div class="row">
                 <div class="col-12">
                     <button (click)="loadMore()" class="action">Load More</button>
                 </div>
-
             </div>
         </div>
 
