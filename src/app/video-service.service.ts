@@ -1,7 +1,8 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams, HttpClientJsonpModule} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpClientJsonpModule, HttpHeaders} from '@angular/common/http';
 import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
-import { Video } from './video-list.model';
+import { Video } from './video.model';
+
 
 
 
@@ -9,7 +10,7 @@ import { Video } from './video-list.model';
   providedIn: 'root'
 })
 export class VideoServiceService {
-  private VIDEO_ENDPOINT = "https://ign-apis.herokuapp.com/videos"
+  private VIDEO_ENDPOINT = "http://localhost:3000/video/"
   private _videoList = new BehaviorSubject<Video[]>([]);
   private videoList: Video[] = []
   
@@ -18,33 +19,96 @@ export class VideoServiceService {
 
 
   //API call to video endpoint
-  loadVideos(startIndex:number, count:number): Observable<any> {
-      const getVideoURL = `${this.VIDEO_ENDPOINT}?startIndex=${startIndex}&count=${count}`;
+  loadVideos(startIndex:number, count:number){
 
 
-      return this.http.jsonp(getVideoURL, 'callback')
-      .pipe(
-        catchError(this.handleError) // then handle the error
-    );
+
+    this.http.get<{message:string, videos:Video[]}>(this.VIDEO_ENDPOINT)
+      .subscribe((response) =>{
+        this.videoList = response.videos
+        this._videoList.next(this.videoList)
+      },
+      (error:any) => { console.log(error);
+      })
+        
+        // then handle the error
+    
   }
 
   //calls the API then processes the object returned into a useful format
   processVideos(startIndex:number, count:number){
-    this.videoList = []
-    this.loadVideos(startIndex,count).subscribe((data: any)=>{
+    this.loadVideos(startIndex,count)
+  }
 
-      let videos = data.data
+  addVideo(newVideo:Video){
+    if (newVideo == null) {
+      return
+    }
+
+    const headers = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    }
+    newVideo.id = ''
+
+    return this.http.post<{ message:string, video: Video}>(this.VIDEO_ENDPOINT, 
+    newVideo, headers)
+    .subscribe((responseData) => { 
+      this.videoList.push(responseData.video)
+
+    })
+  
+  }
+  
+  updateVideo(originalVideo: Video, newVideo: Video) {
+    if (newVideo == null || originalVideo == null) {
+      return
+    }
+    const pos = this.videoList.findIndex(doc => {return doc.id == originalVideo.id});
+    if (pos < 0){
+      return
+    }
+
+    newVideo.id = originalVideo.id
+
+    const headers = {
+      headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+      })
+    }
+
+    this.http.put(this.VIDEO_ENDPOINT + originalVideo.id, newVideo, headers)
+      .subscribe(
+        () => {
+          this.videoList[pos] = newVideo;
+        }
+      )
+
+  }
+
+
+  deleteVideo(video:Video) {
+    if (!video) {
 
       
-      let nVideoList: Array<Video> = []
-      for (let video of videos){
-  
-        let nVideo = new Video(video.contentId, video.contentType, video.thumbnails, video.metadata, video.assets)
-        this.videoList.push(nVideo)
-      }
-      this._videoList.next(this.videoList)
-    })
+        return;
+    }
+
+    
+    const pos = this.videoList.findIndex(doc => {return doc.id == video.id});
+    if (pos < 0) {
+
+        return;
+    }
+    this.http.delete(this.VIDEO_ENDPOINT +video.id)
+      .subscribe(() => {
+        this.videoList.splice(pos, 1);
+      })
   }
+
+
+
 
 
   observeVideos(): Observable<Video[]> {

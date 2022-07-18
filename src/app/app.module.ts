@@ -11,6 +11,12 @@ import {VgOverlayPlayModule} from '@videogular/ngx-videogular/overlay-play';
 import { VideoPlayerComponent } from './video-player/video-player.component';
 import { VideoPlayerPlaylistComponent } from './video-player/video-player-playlist/video-player-playlist.component';
 import { VideoPlayerVideoBoxComponent } from './video-player/video-player-video-box/video-player-video-box.component';
+import { VideoEditComponent } from './video-player/video-edit/video-edit.component';
+import { FormsModule } from '@angular/forms';
+import {MatDialogModule} from '@angular/material/dialog';
+import { ModalModule } from 'ngx-bootstrap/modal';
+
+
 
 
 
@@ -19,7 +25,9 @@ import { VideoPlayerVideoBoxComponent } from './video-player/video-player-video-
     AppComponent,
     VideoPlayerComponent,
     VideoPlayerPlaylistComponent,
-    VideoPlayerVideoBoxComponent
+    VideoPlayerVideoBoxComponent,
+    VideoEditComponent
+
 
   ],
   imports: [
@@ -30,7 +38,10 @@ import { VideoPlayerVideoBoxComponent } from './video-player/video-player-video-
     VgCoreModule,
     VgControlsModule,
     VgOverlayPlayModule,
-    VgBufferingModule    
+    VgBufferingModule,
+    FormsModule,
+    MatDialogModule,
+    ModalModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

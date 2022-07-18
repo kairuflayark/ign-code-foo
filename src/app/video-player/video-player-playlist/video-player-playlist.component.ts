@@ -21,4 +21,8 @@ export class VideoPlayerPlaylistComponent implements OnInit {
   clickVideo(){
     this.changeVideo.emit(this.contentId)
   }
+
+  onRemoveItem(){
+    
+  }
 }

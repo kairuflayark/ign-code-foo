@@ -11,7 +11,7 @@ export class VideoPlayerVideoBoxComponent implements OnInit {
   @Input("thumbnailURL") thumbnailURL!:SafeUrl;
   @Input("videoURL") videoURL!:SafeUrl;
   @Input("title") title!:string;
-  @Input("description") description!:string
+  @Input("artist") artist!:string;
 
   @Output() nextVideo:EventEmitter<Boolean> = new EventEmitter();
 
@@ -32,8 +32,9 @@ export class VideoPlayerVideoBoxComponent implements OnInit {
           this.nextVideo.emit(true)
           this.autoplay = true
       }
-  );
-}
+    );
+  }
+  
 
 
 }
